@@ -3,18 +3,19 @@ package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Task;
+import com.example.demo.mapper.TaskMapper;
 
 @Service
 public class TaskService {
+  @Autowired
+  private TaskMapper taskMapper;
 
   public List<Task> getTasks() {
-    List<Task> tasks = new ArrayList<>();
-    tasks.add(new Task(1, "task 1"));
-    tasks.add(new Task(2, "task 2"));
-    tasks.add(new Task(3, "task 3"));
+    List<Task> tasks = taskMapper.findAll();
     return tasks;
   }
 }
