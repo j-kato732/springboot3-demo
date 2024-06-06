@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,5 +16,10 @@ public class TaskService {
   public List<Task> getTasks() {
     List<Task> tasks = taskMapper.findAll();
     return tasks;
+  }
+
+  public Integer addTask(Task task) {
+    Integer id = taskMapper.insert(task);
+    return id;
   }
 }

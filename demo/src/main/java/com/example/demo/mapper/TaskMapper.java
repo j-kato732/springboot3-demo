@@ -15,8 +15,8 @@ public interface TaskMapper {
   Task findById(int id);
 
   @Insert("INSERT INTO tasks(description) VALUES(#{description})")
-  @Options(useGeneratedKeys = true, keyProperty = "id")
-  void insert(Task task);
+  @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+  int insert(Task task);
 
   @Update("UPDATE tasks SET description = #{description} WHERE id = #{id}")
   void update(Task task);
