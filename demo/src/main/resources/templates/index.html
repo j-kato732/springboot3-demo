@@ -12,6 +12,10 @@
     <ul>
         <li th:each="task : ${tasks}">
             <span th:text="${task.description}">Task Description</span>
+            <form th:action="@{/tasks/delete}" method="post" style="display:inline">
+                <input type="hidden" name="id" th:value="${task.id}" />
+                <button type="submit">Delete</button>
+            </form>
         </li>
     </ul>
     <!--
@@ -19,12 +23,6 @@
         <input type="text" name="task" placeholder="Add new task" required>
         <button type="submit">Add</button>
     </form>
-      <ul>
-          <li th:each="todo : ${todos}">
-              <span th:text="${todo.task}"></span>
-              <a th:href="@{'/delete/' + ${todo.id}}">Delete</a>
-          </li>
-      </ul>
     -->
 </body>
 </html>

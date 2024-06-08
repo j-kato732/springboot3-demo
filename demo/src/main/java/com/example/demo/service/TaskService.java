@@ -22,4 +22,8 @@ public class TaskService {
     Integer id = taskMapper.insert(task);
     return id;
   }
+
+  public void deleteTask(int id) {
+    taskMapper.delete(id);
+  }
 }

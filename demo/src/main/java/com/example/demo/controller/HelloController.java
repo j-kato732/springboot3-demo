@@ -41,6 +41,15 @@ public class HelloController {
     return "redirect:" + redirectUrl;
   }
 
+  @PostMapping("/tasks/delete")
+  public String deleteTask(@ModelAttribute Task task, HttpServletRequest request) {
+    taskService.deleteTask(task.getId());
+
+    // 動的にリダイレクトURLを取得
+    String redirectUrl = getBaseUrl(request) + "/";
+    return "redirect:" + redirectUrl;
+  }
+
   private String getBaseUrl(HttpServletRequest request) {
     String scheme = request.getHeader("X-Forwarded-Proto");
     if (scheme == null) {
