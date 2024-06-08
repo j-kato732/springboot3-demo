@@ -36,7 +36,7 @@ public class HelloController {
   public String addTask(@ModelAttribute Task task, HttpServletRequest request) {
     taskService.addTask(task);
 
-    // 動的にリダイレクトURLを取得
+    // CodeSpaceではredirect:/で正しく動かないので、動的にURLを取得してリダイレクトする。
     String redirectUrl = getBaseUrl(request) + "/";
     return "redirect:" + redirectUrl;
   }
