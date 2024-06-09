@@ -18,9 +18,17 @@ public class TaskService {
     return tasks;
   }
 
+  public Task getTaskById(int id) {
+    return taskMapper.findById(id);
+  }
+
   public Integer addTask(Task task) {
     Integer id = taskMapper.insert(task);
     return id;
+  }
+
+  public void updateTask(Task task) {
+    taskMapper.update(task);
   }
 
   public void deleteTask(int id) {

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.model.Task;
@@ -37,6 +38,22 @@ public class HelloController {
     taskService.addTask(task);
 
     // CodeSpaceではredirect:/で正しく動かないので、動的にURLを取得してリダイレクトする。
+    String redirectUrl = getBaseUrl(request) + "/";
+    return "redirect:" + redirectUrl;
+  }
+
+  @GetMapping("/tasks/edit/{id}")
+  public String editTask(Model model, @PathVariable("id") int id) {
+    Task task = taskService.getTaskById(id);
+
+    model.addAttribute("task", task);
+    return "edit";
+  }
+
+  @PostMapping("/tasks/edit")
+  public String editTask(@ModelAttribute Task task, HttpServletRequest request) {
+    taskService.updateTask(task);
+
     String redirectUrl = getBaseUrl(request) + "/";
     return "redirect:" + redirectUrl;
   }
