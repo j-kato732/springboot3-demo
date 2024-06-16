@@ -6,9 +6,11 @@
 <body>
     <h1>TODO List</h1>
     <form action="#" th:action="@{/tasks}" th:object="${task}" method="post">
-        <input type="text" th:field="*{description}" placeholder="Task description" />
+        <input type="text" th:field="*{description}" placeholder="task description" />
         <button type="submit">Add Task</button>
+        <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
     </form>
+
     <ul>
         <li th:each="task : ${tasks}">
             <span th:text="${task.description}">Task Description</span>

@@ -1,8 +1,13 @@
 package com.example.demo.model;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
 public class Task {
 
   private int id;
+
+  @Size(min = 1, max = 10, message = "タスクは1文字以上100文字以下で入力してください。")
   private String description;
 
   public Task(int id, String description) {
