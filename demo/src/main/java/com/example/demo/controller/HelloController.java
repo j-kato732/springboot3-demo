@@ -28,7 +28,7 @@ public class HelloController {
   @GetMapping("/")
   public String hello(Model model) {
     // テンプレートエンジンにtask一覧を渡す
-    prepareModel(model, new Task(), null, null);
+    prepareModel(model, new Task(), null);
 
     return "index";
   }
@@ -38,7 +38,7 @@ public class HelloController {
       Model model) {
 
     if (result.hasErrors()) {
-      prepareModel(model, task, result, null);
+      prepareModel(model, task, null);
       return "index";
     }
 
@@ -49,7 +49,7 @@ public class HelloController {
       String redirectUrl = getBaseUrl(request) + "/";
       return "redirect:" + redirectUrl;
     } catch (TaskDuplicationException e) {
-      prepareModel(model, task, result, e);
+      prepareModel(model, task, e);
       return "index";
     }
   }
@@ -87,13 +87,9 @@ public class HelloController {
     return "redirect:" + redirectUrl;
   }
 
-  private void prepareModel(Model model, Task task, BindingResult result, Throwable e) {
+  private void prepareModel(Model model, Task task, Throwable e) {
     List<Task> tasks = taskService.getTasks();
     model.addAttribute("tasks", tasks);
-
-    if (result != null) {
-      model.addAttribute("org.springframework.validation.BindingResult.task", result);
-    }
 
     if (e != null) {
       model.addAttribute("error", e.getMessage());
