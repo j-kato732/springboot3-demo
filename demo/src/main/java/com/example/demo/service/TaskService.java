@@ -2,10 +2,13 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Task;
+import com.example.demo.exception.TaskDuplicationException;
 import com.example.demo.mapper.TaskMapper;
 
 @Service
@@ -23,8 +26,16 @@ public class TaskService {
   }
 
   public Integer addTask(Task task) {
-    Integer id = taskMapper.insert(task);
-    return id;
+    try {
+      Integer id = taskMapper.insert(task);
+      return id;
+    } catch (Exception e) {
+      Throwable cause = e.getCause();
+      if (cause instanceof JdbcSQLIntegrityConstraintViolationException) {
+        throw new TaskDuplicationException("そのタスクは存在します。", e);
+      }
+      throw new RuntimeException("予期せぬエラーが発生しました。", e);
+    }
   }
 
   public void updateTask(Task task) {

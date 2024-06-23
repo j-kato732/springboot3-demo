@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.exception.TaskDuplicationException;
 import com.example.demo.model.Task;
 import com.example.demo.service.TaskService;
 
@@ -27,7 +28,7 @@ public class HelloController {
   @GetMapping("/")
   public String hello(Model model) {
     // テンプレートエンジンにtask一覧を渡す
-    prepareModel(model, new Task(), null);
+    prepareModel(model, new Task(), null, null);
 
     return "index";
   }
@@ -37,15 +38,20 @@ public class HelloController {
       Model model) {
 
     if (result.hasErrors()) {
-      prepareModel(model, task, result);
+      prepareModel(model, task, result, null);
       return "index";
     }
 
-    taskService.addTask(task);
+    try {
+      taskService.addTask(task);
 
-    // CodeSpaceではredirect:/で正しく動かないので、動的にURLを取得してリダイレクトする。
-    String redirectUrl = getBaseUrl(request) + "/";
-    return "redirect:" + redirectUrl;
+      // CodeSpaceではredirect:/で正しく動かないので、動的にURLを取得してリダイレクトする。
+      String redirectUrl = getBaseUrl(request) + "/";
+      return "redirect:" + redirectUrl;
+    } catch (TaskDuplicationException e) {
+      prepareModel(model, task, result, e);
+      return "index";
+    }
   }
 
   @GetMapping("/tasks/edit/{id}")
@@ -81,12 +87,16 @@ public class HelloController {
     return "redirect:" + redirectUrl;
   }
 
-  private void prepareModel(Model model, Task task, BindingResult result) {
+  private void prepareModel(Model model, Task task, BindingResult result, Throwable e) {
     List<Task> tasks = taskService.getTasks();
     model.addAttribute("tasks", tasks);
 
     if (result != null) {
       model.addAttribute("org.springframework.validation.BindingResult.task", result);
+    }
+
+    if (e != null) {
+      model.addAttribute("error", e.getMessage());
     }
 
     model.addAttribute("task", task);
