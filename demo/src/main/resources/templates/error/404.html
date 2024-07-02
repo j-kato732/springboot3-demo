@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>404 - Not Found</title>
+</head>
+<body>
+    <h1 th:text="|${errorCode} ${errorTitle}|"></h1>
+    <p th:text="${errorMessage}"></p>
+    <a th:href="@{/}">Go to Home</a>
+</body>
+</html>
